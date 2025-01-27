@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import '../widgets/task_dialog.dart';
 
-class KanbanBoard extends StatelessWidget {
+void main() {
+  runApp(KanbanApp());
+}
+
+class KanbanApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false, // 디버그 배너 제거
+      home: KanbanBoard(),
+    );
+  }
+}
+
+class KanbanBoard extends StatefulWidget {
+  @override
+  _KanbanBoardState createState() => _KanbanBoardState();
+}
+
+class _KanbanBoardState extends State<KanbanBoard> {
   final List<String> boards = ["할 일", "급한 일", "진행 중", "완료한 일"];
+
   final Map<String, List<Map<String, dynamic>>> boardCards = {
     "할 일": [
       {"title": "Flutter 공부", "content": "칸반보드 구현하기", "date": "2025-01-25", "status": "할 일"},
@@ -18,12 +39,35 @@ class KanbanBoard extends StatelessWidget {
     ],
   };
 
+  void _showTaskDialog({Map<String, dynamic>? initialData, required String board}) {
+    showDialog(
+      context: context,
+      builder: (context) => TaskDialog(
+        initialData: initialData, // 수정할 때 데이터를 넘겨줌
+        onSave: (data) {
+          setState(() {
+            if (initialData == null) {
+              boardCards[board]!.add(data);
+            } else {
+              int index = boardCards[board]!.indexOf(initialData);
+              boardCards[board]![index] = data;
+            }
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('칸반 보드 일정 관리'),
         centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showTaskDialog(board: "할 일"),
+        child: Icon(Icons.add),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -59,6 +103,7 @@ class KanbanBoard extends StatelessWidget {
                               title: Text(card['title']),
                               subtitle: Text('${card['content']}\n날짜: ${card['date']}'),
                               isThreeLine: true,
+                              onTap: () => _showTaskDialog(initialData: card, board: board),
                             ),
                           );
                         },
