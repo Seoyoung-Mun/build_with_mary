@@ -17,7 +17,7 @@ class TaskDialog extends StatefulWidget {
 class _TaskDialogState extends State<TaskDialog> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _titleController;
-  late TextEditingController _contentController;
+  late TextEditingController _descriptionController;
   late TextEditingController _dateController;
   String _status = "할 일";
 
@@ -25,7 +25,7 @@ class _TaskDialogState extends State<TaskDialog> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.initialData?['title'] ?? '');
-    _contentController = TextEditingController(text: widget.initialData?['content'] ?? '');
+    _descriptionController = TextEditingController(text: widget.initialData?['content'] ?? '');
     _dateController = TextEditingController(text: widget.initialData?['date'] ?? '');
     _status = widget.initialData?['status'] ?? "할 일";
   }
@@ -33,7 +33,7 @@ class _TaskDialogState extends State<TaskDialog> {
   @override
   void dispose() {
     _titleController.dispose();
-    _contentController.dispose();
+    _descriptionController.dispose();
     _dateController.dispose();
     super.dispose();
   }
@@ -59,7 +59,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 },
               ),
               TextFormField(
-                controller: _contentController,
+                controller: _descriptionController,
                 decoration: InputDecoration(labelText: '내용'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -108,7 +108,7 @@ class _TaskDialogState extends State<TaskDialog> {
             if (_formKey.currentState?.validate() ?? false) {
               widget.onSave({
                 'title': _titleController.text,
-                'content': _contentController.text,
+                'description': _descriptionController.text,
                 'date': _dateController.text,
                 'status': _status,
               });

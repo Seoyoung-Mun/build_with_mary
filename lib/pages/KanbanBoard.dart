@@ -27,13 +27,13 @@ class _KanbanBoardState extends State<KanbanBoard> {
     "할 일": [
       {
         "title": "Flutter 공부",
-        "content": "칸반보드 구현하기",
+        "description": "칸반보드 구현하기",
         "date": "2025-01-25",
         "status": "할 일"
       },
       {
         "title": "서점 가기",
-        "content": "책 구매",
+        "description": "책 구매",
         "date": "2025-01-26",
         "status": "할 일"
       },
@@ -41,7 +41,7 @@ class _KanbanBoardState extends State<KanbanBoard> {
     "급한 일": [
       {
         "title": "과제 제출",
-        "content": "BMB801 과제",
+        "description": "BMB801 과제",
         "date": "2025-01-24",
         "status": "급한 일"
       },
@@ -49,7 +49,7 @@ class _KanbanBoardState extends State<KanbanBoard> {
     "진행 중": [
       {
         "title": "운동하기",
-        "content": "헬스장 가기",
+        "description": "헬스장 가기",
         "date": "2025-01-23",
         "status": "진행 중"
       },
@@ -57,7 +57,7 @@ class _KanbanBoardState extends State<KanbanBoard> {
     "완료한 일": [
       {
         "title": "장보기",
-        "content": "마트에서 식료품 구매",
+        "description": "마트에서 식료품 구매",
         "date": "2025-01-22",
         "status": "완료한 일"
       },
@@ -101,7 +101,8 @@ class _KanbanBoardState extends State<KanbanBoard> {
           children: boards.map((board) {
             return Expanded(
               child: DragTarget<Map<String, dynamic>>(
-                onAccept: (card) {
+                onAcceptWithDetails: (DragTargetDetails<Map<String, dynamic>> details) {
+                  final card = details.data;
                   setState(() {
                     String oldBoard = card['status'];
                     boardCards[oldBoard]!.remove(card);
@@ -172,7 +173,7 @@ class _KanbanBoardState extends State<KanbanBoard> {
       margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
       child: ListTile(
         title: Text(card['title']),
-        subtitle: Text('${card['content']}\n날짜: ${card['date']}'),
+        subtitle: Text('${card['description']}\n날짜: ${card['date']}'),
         isThreeLine: true,
         onTap: () => _showTaskDialog(initialData: card, board: board),
       ),
