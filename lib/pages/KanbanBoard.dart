@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/task.dart';
 import '../widgets/task_dialog.dart';
 
 void main() {
@@ -19,9 +20,14 @@ class KanbanBoard extends StatefulWidget {
   @override
   _KanbanBoardState createState() => _KanbanBoardState();
 }
-
+//todo: jh: 마지막 미션, 상용 어플리케이션 디자인 흉내
 class _KanbanBoardState extends State<KanbanBoard> {
+  //todo: jh: boards를 enum type으로 변경, file하나 만들어서 models 폴더로 이동
   final List<String> boards = ["할 일", "급한 일", "진행 중", "완료한 일"];
+
+  //todo: jh: provider로 역할 이동, task 객체로 만들어서.
+  //final List<Task> boardCards=[];
+  //todo: jh: datepicker 이용 날짜 선택, exapnd 형태면 더 멋지겠음. 그냥 popup으로 해도 됨.
 
   final Map<String, List<Map<String, dynamic>>> boardCards = {
     "할 일": [
@@ -29,7 +35,7 @@ class _KanbanBoardState extends State<KanbanBoard> {
         "title": "Flutter 공부",
         "description": "칸반보드 구현하기",
         "date": "2025-01-25",
-        "status": "할 일"
+        "status": "할 일"// todo:jh: BoardEnum.do 이런 형태로 enum을 사용하도록 해야함.
       },
       {
         "title": "서점 가기",
@@ -99,6 +105,8 @@ class _KanbanBoardState extends State<KanbanBoard> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: boards.map((board) {
+            //todo; boardEnum.values 를 응용해서 listview.builder로 대체
+            //todo; JH: status에 따라 title container 색상 다르게.
             return Expanded(
               child: DragTarget<Map<String, dynamic>>(
                 onAcceptWithDetails: (DragTargetDetails<Map<String, dynamic>> details) {

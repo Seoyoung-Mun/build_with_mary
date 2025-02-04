@@ -25,7 +25,7 @@ class _TaskDialogState extends State<TaskDialog> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.initialData?['title'] ?? '');
-    _descriptionController = TextEditingController(text: widget.initialData?['content'] ?? '');
+    _descriptionController = TextEditingController(text: widget.initialData?['description'] ?? '');
     _dateController = TextEditingController(text: widget.initialData?['date'] ?? '');
     _status = widget.initialData?['status'] ?? "할 일";
   }
@@ -40,6 +40,7 @@ class _TaskDialogState extends State<TaskDialog> {
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
       title: Text(widget.initialData == null ? '일정 추가' : '일정 수정'),
       content: Form(
@@ -82,12 +83,12 @@ class _TaskDialogState extends State<TaskDialog> {
               DropdownButtonFormField<String>(
                 value: _status,
                 decoration: InputDecoration(labelText: '상태'),
+                //todo: jh: 다음 interable 문법을 함수와 for in을 사용하는 형태로 변경하면 좋겠음, BoardEnum type으로 부터 읽어옴. BoardEnum.values 이런거 이용.
                 items: ["할 일", "급한 일", "진행 중", "완료한 일"]
                     .map((status) => DropdownMenuItem(
                   value: status,
                   child: Text(status),
-                ))
-                    .toList(),
+                )).toList(),
                 onChanged: (value) {
                   setState(() {
                     _status = value ?? "할 일";
