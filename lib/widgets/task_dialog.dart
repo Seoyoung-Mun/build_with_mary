@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:build_with_mary/models/task_status_enum.dart';
+import 'package:build_with_mary/models/task.dart';
 
 class TaskDialog extends StatefulWidget {
-  final Map<String, dynamic>? initialData;
-  final Function(Map<String, dynamic>) onSave;
+  final Task? initialTask;
+  final Function(Task) onSave;
 
   const TaskDialog({
     Key? key,
-    this.initialData,
+    this.initialTask,
     required this.onSave,
   }) : super(key: key);
 
@@ -18,31 +20,56 @@ class _TaskDialogState extends State<TaskDialog> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
-  late TextEditingController _dateController;
-  String _status = "할 일";
+  late TextEditingController _deadlineDateController;
+  TaskStatus _status = TaskStatus.todo;
+  DateTime? _selectedDate;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.initialData?['title'] ?? '');
-    _descriptionController = TextEditingController(text: widget.initialData?['description'] ?? '');
-    _dateController = TextEditingController(text: widget.initialData?['date'] ?? '');
-    _status = widget.initialData?['status'] ?? "할 일";
+    _titleController =
+        TextEditingController(text: widget.initialTask?.title ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.initialTask?.description ?? '');
+    _selectedDate = widget.initialTask?.deadlineDate;
+    _status = widget.initialTask?.status ?? TaskStatus.todo;
+    _deadlineDateController = TextEditingController(
+      text: _selectedDate != null
+          ? "${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}"
+          : '',
+    );
   }
 
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
-    _dateController.dispose();
+    _deadlineDateController.dispose();
     super.dispose();
+  }
+
+  // 📅 날짜 선택기 (모달 팝업)
+  Future<void> _pickDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _deadlineDateController.text =
+            "${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
-      title: Text(widget.initialData == null ? '일정 추가' : '일정 수정'),
+      title: Text(widget.initialTask == null ? '일정 추가' : '일정 수정'),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -51,47 +78,44 @@ class _TaskDialogState extends State<TaskDialog> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(labelText: '제목'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '제목을 입력하세요';
-                  }
-                  return null;
-                },
+                decoration: const InputDecoration(labelText: '제목'),
+                validator: (value) =>
+                    value == null || value.isEmpty ? '제목을 입력하세요' : null,
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: '내용'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '내용을 입력하세요';
-                  }
-                  return null;
-                },
+                decoration: const InputDecoration(labelText: '내용'),
+                validator: (value) =>
+                    value == null || value.isEmpty ? '내용을 입력하세요' : null,
               ),
+              const SizedBox(height: 10),
+
+              // 📅 날짜 입력 필드 (터치 시 DatePicker 모달 팝업)
               TextFormField(
-                controller: _dateController,
-                decoration: InputDecoration(labelText: '날짜 (YYYY-MM-DD)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '날짜를 입력하세요';
-                  }
-                  // Optional: Add more date validation here
-                  return null;
-                },
+                controller: _deadlineDateController,
+                decoration: InputDecoration(
+                  labelText: '날짜 선택 (YYYY-MM-DD)',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.calendar_today, color: Colors.blue),
+                    onPressed: () => _pickDate(context),
+                  ),
+                ),
+                readOnly: true, // 키보드 입력 방지 (클릭 시 DatePicker만 열리게 함)
               ),
-              DropdownButtonFormField<String>(
+
+              const SizedBox(height: 10),
+              DropdownButtonFormField<TaskStatus>(
                 value: _status,
-                decoration: InputDecoration(labelText: '상태'),
-                //todo: jh: 다음 interable 문법을 함수와 for in을 사용하는 형태로 변경하면 좋겠음, BoardEnum type으로 부터 읽어옴. BoardEnum.values 이런거 이용.
-                items: ["할 일", "급한 일", "진행 중", "완료한 일"]
-                    .map((status) => DropdownMenuItem(
-                  value: status,
-                  child: Text(status),
-                )).toList(),
+                decoration: const InputDecoration(labelText: '상태'),
+                items: TaskStatus.values.map((status) {
+                  return DropdownMenuItem(
+                    value: status,
+                    child: Text(status.kor),
+                  );
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _status = value ?? "할 일";
+                    _status = value ?? TaskStatus.todo;
                   });
                 },
               ),
@@ -102,21 +126,24 @@ class _TaskDialogState extends State<TaskDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('취소'),
+          child: const Text('취소'),
         ),
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
-              widget.onSave({
-                'title': _titleController.text,
-                'description': _descriptionController.text,
-                'date': _dateController.text,
-                'status': _status,
-              });
+              widget.onSave(
+                Task(
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  status: _status,
+                  deadlineDate: _selectedDate,
+                  createDate: DateTime.now(),
+                ),
+              );
               Navigator.of(context).pop();
             }
           },
-          child: Text('저장'),
+          child: const Text('저장'),
         ),
       ],
     );

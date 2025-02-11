@@ -7,4 +7,11 @@ enum TaskStatus {
 
   final String kor;
   const TaskStatus(this.kor);
+
+  static TaskStatus fromIndex(int index){
+    if (index < 0 || index >= TaskStatus.values.length) {
+      return TaskStatus.todo; // 기본값 설정
+    }
+    return TaskStatus.values[index];
+  }
 }

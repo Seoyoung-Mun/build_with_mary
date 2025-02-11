@@ -1,8 +1,17 @@
+import 'package:build_with_mary/controllers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:build_with_mary/routes/router.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
