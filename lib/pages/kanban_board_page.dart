@@ -14,13 +14,13 @@ class KanbanBoardPage extends StatefulWidget {
 }
 
 class _KanbanBoardPageState extends State<KanbanBoardPage> {
-  List<Task> getCurrentStatusTask(taskProvider, TaskStatus status) {
-    return taskProvider.tasks.where((task) => task.status == status).toList();
-  }
+
+  //List<Task> tasks = [];
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    //tasks = Provider.of<TaskProvider>(context, listen: true).tasks;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kanban 보드'),
@@ -29,14 +29,14 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(
+          // child: Center(
             child: ElevatedButton(
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (context) => TaskDialog(
                     onSave: (newTask) {
-                      taskProvider.addTask(newTask);
+                      Provider.of<TaskProvider>(context, listen: false).addTask(newTask);
                     },
                   ),
                 );
@@ -47,26 +47,30 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
               ),
             ),
           ),
-        ),
+        // ),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: TaskStatus.values.length,
-              itemBuilder: (context, index) {
-                final status = TaskStatus.fromIndex(index);
-                final filteredTasks = getCurrentStatusTask(taskProvider, status);
+            child: Consumer<TaskProvider>(
+              builder: (context, taskProvider, child) {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: TaskStatus.values.length,
+                  itemBuilder: (context, index) {
+                    final status = TaskStatus.fromIndex(index);
+                    final filteredTasks = taskProvider.getCurrentStatusTask( status);
 
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: KanbanBoard(
-                      status: status,
-                      tasks: filteredTasks,
-                    ),
-                  ),
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: KanbanBoard(
+                          status: status,
+                          tasks: filteredTasks,
+                        ),
+                      ),
+                    );
+                  },
                 );
-              },
+              }
             ),
           ),
         ],

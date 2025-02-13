@@ -54,8 +54,8 @@ class Task {
       'title': title,
       'description': description,
       'status': status.index,
-      'deadlineDate': deadlineDate?.toIso8601String(),
-      'createDate': createDate?.toIso8601String(),
+      'deadlineDate': deadlineDate,
+      'createDate': createDate,
     };
   }
 }

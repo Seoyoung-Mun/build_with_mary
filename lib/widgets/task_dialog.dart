@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:build_with_mary/models/task_status_enum.dart';
 import 'package:build_with_mary/models/task.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:build_with_mary/controllers/task_provider.dart';
 
 class TaskDialog extends StatefulWidget {
   final Task? initialTask;
@@ -129,19 +132,19 @@ class _TaskDialogState extends State<TaskDialog> {
           child: const Text('취소'),
         ),
         ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState?.validate() ?? false) {
-              widget.onSave(
-                Task(
-                  title: _titleController.text,
-                  description: _descriptionController.text,
-                  status: _status,
-                  deadlineDate: _selectedDate,
-                  createDate: DateTime.now(),
-                ),
-              );
-              Navigator.of(context).pop();
-            }
+          onPressed: () async {
+
+            Task newTask = Task(
+              title: _titleController.text,
+              description: _descriptionController.text,
+              status: _status,
+              deadlineDate: _selectedDate,
+              createDate: DateTime.now(),
+            );
+
+            Provider.of<TaskProvider>(context, listen: false).addTask(newTask);
+            context.pop();
+            print(newTask.status);
           },
           child: const Text('저장'),
         ),
