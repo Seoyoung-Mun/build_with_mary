@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:build_with_mary/controllers/task_provider.dart';
-import 'package:build_with_mary/models/task.dart';
 import 'package:build_with_mary/models/task_status_enum.dart';
 import 'package:build_with_mary/widgets/kanban_board.dart';
 import 'package:build_with_mary/widgets/task_dialog.dart';
@@ -15,11 +14,8 @@ class KanbanBoardPage extends StatefulWidget {
 
 class _KanbanBoardPageState extends State<KanbanBoardPage> {
 
-  //List<Task> tasks = [];
-
   @override
   Widget build(BuildContext context) {
-    //tasks = Provider.of<TaskProvider>(context, listen: true).tasks;
 
     return Scaffold(
       appBar: AppBar(
@@ -34,11 +30,7 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => TaskDialog(
-                    onSave: (newTask) {
-                      Provider.of<TaskProvider>(context, listen: false).addTask(newTask);
-                    },
-                  ),
+                  builder: (context) => TaskDialog(),
                 );
               },
               child: const Text(
@@ -56,7 +48,7 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                   itemCount: TaskStatus.values.length,
                   itemBuilder: (context, index) {
                     final status = TaskStatus.fromIndex(index);
-                    final filteredTasks = taskProvider.getCurrentStatusTask( status);
+                    final filteredTasks = taskProvider.getCurrentStatusTask(status);
 
                     return SizedBox(
                       width: MediaQuery.of(context).size.width * 0.25,

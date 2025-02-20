@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "544156502073",
+    "project_id": "kanbanboard-by-mary",
+    "storage_bucket": "kanbanboard-by-mary.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544156502073:android:fd067b8cf3af47521f25e8",
+        "android_client_info": {
+          "package_name": "com.buildwithmary.build_with_mary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqUz-Aw3C8iNc7IXOE6hN5Y2gMLLIjKzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,7 @@
 import 'package:build_with_mary/models/task_status_enum.dart';
 
 class Task {
-  int? taskId;
+  String? taskId;
   String title;
   String description;
   TaskStatus status; //todo-done: jh: enum type으로 변환

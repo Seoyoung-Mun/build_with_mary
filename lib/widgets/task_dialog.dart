@@ -7,12 +7,10 @@ import 'package:build_with_mary/controllers/task_provider.dart';
 
 class TaskDialog extends StatefulWidget {
   final Task? initialTask;
-  final Function(Task) onSave;
 
   const TaskDialog({
     Key? key,
-    this.initialTask,
-    required this.onSave,
+    this.initialTask
   }) : super(key: key);
 
   @override
@@ -131,6 +129,9 @@ class _TaskDialogState extends State<TaskDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('취소'),
         ),
+        //modifyStatus가 true면 수정, false면 새로 추가
+        // 추가
+        if (widget.initialTask==null)
         ElevatedButton(
           onPressed: () async {
 
@@ -147,7 +148,23 @@ class _TaskDialogState extends State<TaskDialog> {
             print(newTask.status);
           },
           child: const Text('저장'),
-        ),
+        )
+        else
+        //수정
+        ElevatedButton( onPressed: () async {
+
+          Task updateTask = Task(
+            title: _titleController.text,
+            description: _descriptionController.text,
+            status: _status,
+            deadlineDate: _selectedDate,
+          );
+
+          Provider.of<TaskProvider>(context, listen: false).updateTask(updateTask);
+          context.pop();
+        },
+          child: const Text('수정'),
+        )
       ],
     );
   }
