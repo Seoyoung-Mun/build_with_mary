@@ -53,7 +53,7 @@ class Task {
       'taskId': taskId,
       'title': title,
       'description': description,
-      'status': status.index,
+      'status': status.index.toDouble(),
       'deadlineDate': deadlineDate,
       'createDate': createDate,
     };

@@ -154,6 +154,7 @@ class _TaskDialogState extends State<TaskDialog> {
         ElevatedButton( onPressed: () async {
 
           Task updateTask = Task(
+            taskId: widget.initialTask?.taskId,
             title: _titleController.text,
             description: _descriptionController.text,
             status: _status,

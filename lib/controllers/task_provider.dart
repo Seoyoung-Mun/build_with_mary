@@ -1,26 +1,26 @@
 import 'dart:collection';
+import 'package:build_with_mary/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:build_with_mary/models/task.dart';
 import 'package:build_with_mary/models/task_status_enum.dart';
 
 class TaskProvider extends ChangeNotifier {
-  // Task 임시데이터
-  List<Task> _tasks = [
-    Task(taskId: "1", title: "할 일 1", description: "설명", status: TaskStatus.todo),
-    Task(taskId: "2", title: "급한 일 1", description: "설명", status: TaskStatus.urgent),
-    Task(taskId: "3", title: "진행 중 작업", description: "설명", status: TaskStatus.inProgress),
-  ];
+  final _firestoreService = FirestoreService();
+  List<Task> _tasks = [];
 
   List<Task> get tasks => UnmodifiableListView(_tasks);
 
   // 새로운 Task 추가
   void addTask(Task task) {
+    _firestoreService.createTask(task);
+    print('프로바이더 작동1');
     _tasks.add(task);
-  //db호출
+    print('프로바이더 작동2');
     notifyListeners();
+    print('프로바이더 작동3');
   }
 
-  // 특정 Task 상태 업데이트
+  // 특정 Task 상태만 업데이트
   void updateTaskStatus(int index, TaskStatus newStatus) {
     _tasks[index].status = newStatus;
 
@@ -32,7 +32,7 @@ class TaskProvider extends ChangeNotifier {
     _tasks[_tasks.indexWhere((taskElement) => taskElement.taskId == task.taskId)] = task;
     //db호출
     notifyListeners();
-    print('updateTask provider 동작');
+
   }
 
 
