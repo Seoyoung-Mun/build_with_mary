@@ -15,6 +15,12 @@ class KanbanBoardPage extends StatefulWidget {
 class _KanbanBoardPageState extends State<KanbanBoardPage> {
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<TaskProvider>(context, listen: false).fetchTasks();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return Scaffold(

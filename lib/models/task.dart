@@ -21,6 +21,7 @@ class Task {
 
   //fromMap
   factory Task.fromMap(Map<String, dynamic> mapData) {
+
     late DateTime deadlineDate;
     if (mapData['deadlineDate'] == null) {
       deadlineDate = mapData['deadlineDate'];
@@ -45,10 +46,12 @@ class Task {
       deadlineDate: deadlineDate,
       createDate: createDate,
     );
+
   }
 
   //toMap
   Map<String, dynamic> toMap() {
+    print("toMap Test: $taskId");
     return {
       'taskId': taskId,
       'title': title,

@@ -13,11 +13,16 @@ class TaskProvider extends ChangeNotifier {
   // 새로운 Task 추가
   void addTask(Task task) {
     _firestoreService.createTask(task);
-    print('프로바이더 작동1');
     _tasks.add(task);
-    print('프로바이더 작동2');
     notifyListeners();
-    print('프로바이더 작동3');
+  }
+
+  // 모든 Task 가져오기
+  void fetchTasks() async {
+    print("📢 Firestore에서 Task 불러오는 중...");
+    _tasks = await _firestoreService.fetchAllTasks();
+    notifyListeners(); // UI 업데이트
+    print("✅ Task 불러오기 완료: ${_tasks.length}개");
   }
 
   // 특정 Task 상태만 업데이트

@@ -57,9 +57,15 @@ class ProfileSection extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 5),
-        Text('📧 Email: webdeveloper.sy@gmail.com'),
-        Text('🐱 Github: github.com/Seoyoung-Mun'),
-        Text('📚 Blog: candoeverything-mary.tistory.com'),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('📧 Email: webdeveloper.sy@gmail.com'),
+            Text('🐱 Github: github.com/Seoyoung-Mun'),
+            Text('📚 Blog: candoeverything-mary.tistory.com'),
+          ],
+        ),
+        SizedBox(height: 15),
       ],
     );
   }
@@ -76,10 +82,16 @@ class SkillsSection extends StatelessWidget {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
-        Text('- Frontend: HTML, CSS, JavaScript, Vue.js, React'),
-        Text('- Backend: Node.js, Express, C#'),
-        Text('- App: Flutter, Dart, Firebase'),
-        Text('- DevOps: MySQL, MSSQL, Naver Cloud Platform'),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('- Frontend: HTML, CSS, JavaScript, Vue.js, React'),
+            Text('- Backend: Node.js, Express, C#'),
+            Text('- App: Flutter, Dart, Firebase'),
+            Text('- DevOps: MySQL, MSSQL, Naver Cloud Platform'),
+          ],
+        ),
+        SizedBox(height: 15),
       ],
     );
   }
@@ -96,10 +108,16 @@ class ProjectsSection extends StatelessWidget {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
-        ProjectTile(
-          title: 'Flutter 프로젝트 - 칸반보드 이동하기',
-          // githubUrl: 'https://github.com/example/flutter-project',
-          routerString: '/kanban',
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProjectTile(
+              title: 'Flutter 프로젝트 - 칸반보드 이동하기',
+              // githubUrl: 'https://github.com/example/flutter-project',
+              routerString: '/kanban',
+            ),
+          ],
         ),
         // ProjectTile(
         //   title: 'Flutter 프로젝트',
