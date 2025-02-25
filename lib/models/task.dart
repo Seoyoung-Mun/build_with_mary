@@ -21,8 +21,9 @@ class Task {
 
   //fromMap
   factory Task.fromMap(Map<String, dynamic> mapData) {
+    print("fromMap Test1: ${mapData}");
 
-    late DateTime deadlineDate;
+    late DateTime? deadlineDate;
     if (mapData['deadlineDate'] == null) {
       deadlineDate = mapData['deadlineDate'];
     } else {
@@ -30,7 +31,7 @@ class Task {
           mapData['deadlineDate'].seconds * 1000);
     }
 
-    late DateTime createDate;
+    late DateTime? createDate;
     if (mapData['createdDate'] == null) {
       createDate = mapData['createdDate'];
     } else {
@@ -44,8 +45,11 @@ class Task {
       description: mapData['description'],
       status: TaskStatus.fromIndex(mapData['status']),
       deadlineDate: deadlineDate,
+      // deadlineData :(mapData['deadlineDate'] != null)
+      // ?(),
       createDate: createDate,
     );
+
 
   }
 

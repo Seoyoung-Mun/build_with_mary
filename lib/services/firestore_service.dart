@@ -33,7 +33,7 @@ class FirestoreService {
         return Task.fromMap(doc.data());
       }).toList();
 
-      print("✅ ${tasks.length}개의 Task 불러옴");
+      print(" ${tasks.length}개의 Task 불러옴");
       return tasks;
 
     } catch (e) {
