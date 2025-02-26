@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PortfolioApp extends StatelessWidget {
   @override
@@ -17,6 +18,7 @@ class PortfolioApp extends StatelessWidget {
 }
 
 class PortfolioScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,30 +45,87 @@ class PortfolioScreen extends StatelessWidget {
 }
 
 class ProfileSection extends StatelessWidget {
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 50,
-          backgroundImage: AssetImage('assets/profile.jpg'), // 프로필 이미지
-        ),
-        SizedBox(height: 10),
-        Text(
-          'Web/App Frontend Developer',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 5),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('📧 Email: webdeveloper.sy@gmail.com'),
-            Text('🐱 Github: github.com/Seoyoung-Mun'),
-            Text('📚 Blog: candoeverything-mary.tistory.com'),
-          ],
-        ),
-        SizedBox(height: 15),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircleAvatar(
+            radius: 50,
+            backgroundImage: AssetImage('assets/profile.jpg'),
+          ),
+          const SizedBox(height: 15),
+          const Text(
+            'Web/App Frontend Developer',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+
+          /// 이메일 정보
+          const Align(
+            alignment: Alignment.center,
+            child: Text(
+              '📧 Email',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+          const Align(
+            alignment: Alignment.center,
+            child: Text('webdeveloper.sy@gmail.com'),
+          ),
+          const SizedBox(height: 12),
+
+          /// 깃허브 정보
+          const Align(
+            alignment: Alignment.center,
+            child: Text(
+              '🐱 Github',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => _launchURL('https://github.com/Seoyoung-Mun'),
+            child: const Align(
+              alignment: Alignment.center,
+              child: Text(
+                'github.com/Seoyoung-Mun',
+                style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          /// 블로그 정보
+          const Align(
+            alignment: Alignment.center,
+            child: Text(
+              '📚 Blog',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => _launchURL('https://candoeverything-mary.tistory.com'),
+            child: const Align(
+              alignment: Alignment.center,
+              child: Text(
+                'candoeverything-mary.tistory.com',
+                style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

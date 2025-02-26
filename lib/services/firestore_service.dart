@@ -41,4 +41,14 @@ class FirestoreService {
       return [];
     }
   }
+
+  Future<void> updateTask(Task task) async {
+    final _taskCollection = _fs.collection('Tasks');
+    try {
+      await _taskCollection.doc(task.taskId).update(task.toMap());
+      print("👍 Task 수정 완료");
+    } catch (e) {
+      print("⚠️ Firestore에 Task 수정 실패: $e");
+    }
+  }
 }

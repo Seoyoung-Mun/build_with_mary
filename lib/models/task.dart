@@ -21,7 +21,6 @@ class Task {
 
   //fromMap
   factory Task.fromMap(Map<String, dynamic> mapData) {
-    print("fromMap Test1: ${mapData}");
 
     late DateTime? deadlineDate;
     if (mapData['deadlineDate'] == null) {
@@ -45,8 +44,6 @@ class Task {
       description: mapData['description'],
       status: TaskStatus.fromIndex(mapData['status']),
       deadlineDate: deadlineDate,
-      // deadlineData :(mapData['deadlineDate'] != null)
-      // ?(),
       createDate: createDate,
     );
 
